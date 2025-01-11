@@ -1,0 +1,33 @@
+% Здесь пишется содержание приложений
+%
+\chapter{Пример листинга программного кода}\label{app:A}\vspace{\baselineskip}
+
+Здесь можно привести полный листинг кода программы или модуля.
+
+\begin{code}
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Данные для графика
+x = np.linspace(0, 10, 100)
+y = np.sin(x)
+
+# Создание графика
+plt.figure(figsize=(10, 6))
+
+plt.plot(x, y, label='sin(x)', color='blue', linewidth=2)
+
+# Настройка графика
+plt.title('График функции sin(x)', fontsize=16)
+plt.xlabel('x', fontsize=14)
+plt.ylabel('sin(x)', fontsize=14)
+plt.legend()
+plt.grid(True)
+
+# Вывод графика
+plt.show()    
+\end{code}
+
+\chapter{Пример второго приложения}\label{app:B}\vspace{\baselineskip}
+
+При необходимости, приложений может быть несколько.

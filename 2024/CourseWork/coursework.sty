@@ -1,0 +1,700 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{coursework}[2024/11/24 v1.0 Style for VSTU student course work]
+
+\setlength{\parindent}{1.25cm} 
+
+\RequirePackage{comment}
+\RequirePackage{xstring}
+\RequirePackage[normalem]{ulem}
+\RequirePackage{ragged2e}
+\RequirePackage{titlesec}
+\RequirePackage{gensymb}
+
+%%% Поля и разметка страницы %%%
+\RequirePackage{pdflscape}  % Для включения альбомных страниц
+\RequirePackage{geometry}   % Для последующего задания полей
+
+% Переопределение для автоматического перемещения \caption вверх
+\RequirePackage{etoolbox}
+
+\RequirePackage{nameref}
+
+%%% Математические пакеты %%%
+\RequirePackage{amsthm,amsmath,amscd}   % Математические дополнения от AMS
+\RequirePackage{amsfonts,amssymb}       % Математические дополнения от AMS
+\RequirePackage{mathtools}              % Добавляет окружение multlined
+\RequirePackage{xfrac}                  % Красивые дроби
+
+\AtBeginDocument{%
+    % \setlength{\abovedisplayshortskip}{\baselineskip}
+    \setlength{\belowdisplayshortskip}{\baselineskip}
+    % \setlength{\abovedisplayskip}{\baselineskip}
+    \setlength{\belowdisplayskip}{\baselineskip}
+}
+
+
+%%% Установки для размера шрифта 14 pt %%%%
+% Формирование переменных и констант для сравнения (один раз для всех подключаемых файлов)%%
+% должно располагаться до вызова пакета fontspec или polyglossia, потому что они сбивают его работу
+\newlength{\curtextsize}
+\newlength{\bigtextsize}
+\setlength{\bigtextsize}{13.9pt}
+
+\makeatletter
+\setlength{\curtextsize}{\f@size pt}
+\makeatother
+
+\PassOptionsToPackage{no-math}{fontspec}    % https://tex.stackexchange.com/a/26295/104425
+\RequirePackage{polyglossia}[2014/05/21]        % Поддержка многоязычности
+\setmainlanguage{russian}
+\RequirePackage[backend=biber,style=gost-numeric,sorting=none,autolang=other]{biblatex}
+
+\indentafterchapter     % Красная строка после заголовков типа chapter
+\RequirePackage{indentfirst}
+
+%%% Таблицы %%%
+\RequirePackage{float}
+\RequirePackage{caption}                % Подписи рисунков и таблиц
+\RequirePackage{longtable} % Длинные таблицы
+\RequirePackage{multirow,makecell}   % Улучшенное форматирование таблиц
+\RequirePackage{tabulary,tabularray} % Таблицы с автоматически подбирающейся шириной столбцов
+\RequirePackage{threeparttable}      % автоматический подгон ширины подписи таблицы
+\RequirePackage{hhline} % Для более гибких горизонтальных линий
+
+
+%%% Общее форматирование
+\RequirePackage{soul}    % Поддержка переносоустойчивых подчёркиваний и зачёркиваний
+\RequirePackage{icomma}  % Запятая в десятичных дробях
+
+%% Векторная графика
+\RequirePackage{tikz}    % Продвинутый пакет векторной графики
+
+\RequirePackage{textcase} % Пакет для преобразования текста в верхний регистр
+
+%%% Гиперссылки %%%
+\let\CYRDZE\relax
+\RequirePackage[hidelinks]{hyperref}[2012/11/06]
+
+% %%% Изображения %%%
+\RequirePackage{graphicx}[2014/04/25]   % Подключаем пакет работы с графикой
+\RequirePackage{subcaption}             % Подписи подрисунков и подтаблиц
+\RequirePackage{pdfpages}               % Добавление внешних pdf файлов
+
+%%% Плавающие объекты %%%
+\RequirePackage{placeins} % для \FloatBarrier
+
+%%% Списки %%%
+\RequirePackage{enumitem}
+
+% Листинги с исходным кодом программ
+\RequirePackage{fancyvrb}
+\RequirePackage{listings}
+\lccode`\~=0\relax %Без этого хака из-за особенностей пакета listings перестают работать конструкции с \MakeLowercase и т. п. в (xe|lua)latex
+
+% Русская традиция начертания греческих букв
+\RequirePackage{upgreek} % прямые греческие ради русской традиции
+
+%%% Счётчики %%%
+\RequirePackage{aliascnt}
+\RequirePackage[figure,table]{totalcount}   % Счётчик рисунков и таблиц
+\RequirePackage{totcount}   % Пакет создания счётчиков на основе последнего номера
+                        % подсчитываемого элемента (может требовать дважды
+                        % компилировать документ)
+\RequirePackage{totpages}   % Счётчик страниц, совместимый с hyperref (ссылается
+                        % на номер последней страницы). Желательно ставить
+                        % последним пакетом в преамбуле
+
+%%% Установка шрифтов %%%
+\setmonofont{Courier New}                          % моноширинный шрифт
+\newfontfamily\cyrillicfonttt{Courier New}         % моноширинный шрифт для кириллицы
+\defaultfontfeatures{Ligatures=TeX}                % стандартные лигатуры TeX, замены нескольких дефисов на тире и т. п. Настройки моноширинного шрифта должны идти до этой строки, чтобы при врезках кода программ в коде не применялись лигатуры и замены дефисов
+\setmainfont{Times New Roman}                      % Шрифт с засечками
+\newfontfamily\cyrillicfont{Times New Roman}       % Шрифт с засечками для кириллицы
+\setsansfont{Arial}                                % Шрифт без засечек
+\newfontfamily\cyrillicfontsf{Arial}               % Шрифт без засечек для кириллицы
+
+%%% Таблицы %%%
+\newcommand{\tablabelsep}{ -- }
+\DeclareCaptionLabelSeparator{tabsep}{\tablabelsep} % нумерация таблиц
+\DeclareCaptionFormat{split}{\splitformatlabel#1\par\splitformattext#3}
+
+\captionsetup[table]{
+        format=plain,                     % формат подписи (plain|hang)
+        font=normal,                      % нормальные размер, цвет, стиль шрифта
+        skip=.0pt,                        % отбивка под подписью
+        parskip=.0pt,                     % отбивка между параграфами подписи
+        position=above,                   % положение подписи
+        justification=raggedleft,         % центровка
+        indent=0cm,                       % смещение строк после первой
+        labelsep=tabsep,                  % разделитель
+        singlelinecheck=false,            % не выравнивать по центру, если умещается в одну строку
+        name=Таблица,
+}
+
+\floatstyle{plaintop}
+\restylefloat{table}
+
+%%% Рисунки %%%
+\newcommand{\figlabelsep}{ -- }
+\DeclareCaptionLabelSeparator{figsep}{\figlabelsep} % нумерация рисунков
+
+\captionsetup[figure]{
+        format=plain,                     % формат подписи (plain|hang)
+        font=normal,                      % нормальные размер, цвет, стиль шрифта
+        skip=.0pt,                        % отбивка под подписью
+        parskip=.0pt,                     % отбивка между параграфами подписи
+        position=below,                   % положение подписи
+        singlelinecheck=true,             % выравнивание по центру, если умещается в одну строку
+        justification=centerlast,         % центровка
+        labelsep=figsep,                  % разделитель
+        name=Рисунок,
+}
+
+%%% Подписи подрисунков %%%
+\DeclareCaptionSubType{figure}
+\renewcommand\thesubfigure{\asbuk{subfigure}} % нумерация подрисунков
+\newcommand{\subfigureskip}{2.pt}
+\captionsetup[subfloat]{
+        labelsep=space,                 % разделитель
+        labelformat=brace,              % одна скобка справа от номера
+        justification=centering,        % центровка
+        singlelinecheck=true,           % выравнивание по центру, если умещается в одну строку
+        skip=\subfigureskip,            % отбивка над подписью
+        parskip=.0pt,                   % отбивка между параграфами подписи
+        position=below,                 % положение подписи
+}
+
+% Настройка окружения Verbatim
+\DefineVerbatimEnvironment{code}{Verbatim}{
+    fontsize=\small, % Устанавливаем размер шрифта
+    xleftmargin=\parindent, % Устанавливаем левый отступ
+    baselinestretch=1.5 % Устанавливаем межстрочный интервал
+}
+
+
+%%% Списки %%%
+% Используем короткое тире (endash) для ненумерованных списков (ГОСТ 2.105-95, пункт 4.1.7, требует дефиса, но так лучше смотрится)
+\renewcommand{\labelitemi}{\normalfont\bfseries{--}}
+
+% Перечисление строчными буквами русского алфавита (ГОСТ 2.105-95, 4.1.7)
+\makeatletter
+\AddEnumerateCounter{\asbuk}{\russian@alph}{щ}      % Управляем списками/перечислениями через пакет enumitem, а он 'не знает' про asbuk, потому 'учим' его
+\makeatother
+%\renewcommand{\theenumi}{\asbuk{enumi}} %первый уровень нумерации
+%\renewcommand{\labelenumi}{\theenumi)} %первый уровень нумерации
+\renewcommand{\theenumii}{\asbuk{enumii}} %второй уровень нумерации
+\renewcommand{\labelenumii}{\theenumii)} %второй уровень нумерации
+\renewcommand{\theenumiii}{\arabic{enumiii}} %третий уровень нумерации
+\renewcommand{\labelenumiii}{\theenumiii)} %третий уровень нумерации
+
+\setlist{nosep,%                                    % Единый стиль для всех списков (пакет enumitem), без дополнительных интервалов.
+    labelindent=\parindent,leftmargin=*%            % Каждый пункт, подпункт и перечисление записывают с абзацного отступа (ГОСТ 2.105-95, 4.1.8)
+}
+
+\makeatletter
+    \def\russian@Alph#1{\ifcase#1\or
+       А\or Б\or В\or Г\or Д\or Е\or Ж\or
+       И\or К\or Л\or М\or Н\or
+       П\or Р\or С\or Т\or У\or Ф\or Х\or
+       Ц\or Ш\or Щ\or Э\or Ю\or Я\else\xpg@ill@value{#1}{russian@Alph}\fi}
+    \def\russian@alph#1{\ifcase#1\or
+       а\or б\or в\or г\or д\or е\or ж\or
+       и\or к\or л\or м\or н\or
+       п\or р\or с\or т\or у\or ф\or х\or
+       ц\or ш\or щ\or э\or ю\or я\else\xpg@ill@value{#1}{russian@alph}\fi}
+    \def\cyr@Alph#1{\ifcase#1\or
+        А\or Б\or В\or Г\or Д\or Е\or Ж\or
+        И\or К\or Л\or М\or Н\or
+        П\or Р\or С\or Т\or У\or Ф\or Х\or
+        Ц\or Ш\or Щ\or Э\or Ю\or Я\else\xpg@ill@value{#1}{cyr@Alph}\fi}
+    \def\cyr@alph#1{\ifcase#1\or
+        а\or б\or в\or г\or д\or е\or ж\or
+        и\or к\or л\or м\or н\or
+        п\or р\or с\or т\or у\or ф\or х\or
+        ц\or ш\or щ\or э\or ю\or я\else\xpg@ill@value{#1}{cyr@alph}\fi}
+\makeatother
+
+
+%%% Интервалы %%%
+%% По ГОСТ Р 7.0.11-2011, пункту 5.3.6 требуется полуторный интервал
+%% Реализация средствами класса (на основе setspace) ближе к типографской классике.
+%% И правит сразу и в таблицах (если со звёздочкой)
+%\DoubleSpacing*     % Двойной интервал
+\OnehalfSpacing*    % Полуторный интервал
+\setSpacing{1.42}   % Полуторный интервал, подобный Ворду (возможно, стоит включать вместе с предыдущей строкой)
+
+%%% Макет страницы %%%
+% Выставляем значения полей (ГОСТ 7.0.11-2011, 5.3.7)
+\geometry{a4paper, top=1.5cm, bottom=2cm, left=3.0cm, right=1cm, nofoot, nomarginpar} %, heightrounded, showframe
+\setlength{\topskip}{0pt}   %размер дополнительного верхнего поля
+\setlength{\footskip}{12.3pt} % снимет warning, согласно https://tex.stackexchange.com/a/334346
+
+%%% Выравнивание и переносы %%%
+%% http://tex.stackexchange.com/questions/241343/what-is-the-meaning-of-fussy-sloppy-emergencystretch-tolerance-hbadness
+%% http://www.latex-community.org/forum/viewtopic.php?p=70342#p70342
+\tolerance 1414
+\hbadness 1414
+\emergencystretch 1.5em % В случае проблем регулировать в первую очередь
+\hfuzz 0.3pt
+\vfuzz \hfuzz
+%\raggedbottom
+%\sloppy                 % Избавляемся от переполнений
+\clubpenalty=10000      % Запрещаем разрыв страницы после первой строки абзаца
+\widowpenalty=10000     % Запрещаем разрыв страницы после последней строки абзаца
+\brokenpenalty=4991     % Ограничение на разрыв страницы, если строка заканчивается переносом
+
+%%% Блок управления параметрами для выравнивания заголовков в тексте %%%
+\newlength{\otstuplen}
+\setlength{\otstuplen}{\parindent}
+\newcommand{\hdngalign}{}                 % по левому краю
+\newcommand{\hdngaligni}{\hspace{\otstuplen}}      % по левому краю
+
+%%% Оглавление %%%
+\renewcommand{\cftchapterdotsep}{\cftdotsep}                % отбивка точками до номера страницы начала главы/раздела
+
+%% Переносить слова в заголовке не допускается (ГОСТ Р 7.0.11-2011, 5.3.5). Заголовки в оглавлении должны точно повторять заголовки в тексте (ГОСТ Р 7.0.11-2011, 5.2.3). Прямого указания на запрет переносов в оглавлении нет, но по той же логике невнесения искажений в смысл, лучше в оглавлении не переносить:
+\setrmarg{2.55em plus1fil}                             %To have the (sectional) titles in the ToC, etc., typeset ragged right with no hyphenation
+\renewcommand{\cftchapterpagefont}{\normalfont}        % нежирные номера страниц у глав в оглавлении
+\renewcommand{\cftchapterleader}{\cftdotfill{\cftchapterdotsep}}% нежирные точки до номеров страниц у глав в оглавлении
+\renewcommand{\cftchapterfont}{}                       % нежирные названия глав в оглавлении
+
+\settocdepth{subsubsection}   % Добавлять в оглавление до subsubsection
+
+% \renewcommand\cftsectionaftersnum{.\space}       % добавляет точку с пробелом после номера подраздела в оглавлении
+% \renewcommand\cftsubsectionaftersnum{.\space}    % добавляет точку с пробелом после номера подподраздела в оглавлении
+% \renewcommand\cftsubsubsectionaftersnum{.\space} % добавляет точку с пробелом после номера подподподраздела в оглавлении
+
+% Настройка стиля заголовка раздела
+\titleformat{\section}
+  {\normalfont} % Стиль шрифта заголовка
+  {\thesection} % Нумерация (оставьте пустым, если не нужна)
+  {5pt}                        % Расстояние между номером и заголовком
+  {}                           % Код перед заголовком
+
+% Настройка интервалов для заголовка раздела
+\titlespacing{\section}
+  {\otstuplen}   % Левый отступ
+  {0pt}   % Отступ перед заголовком
+  {0pt} % Отступ после заголовка
+
+% Настройка стиля заголовка подраздела
+\titleformat{\subsection}
+  {\normalfont}
+  {\thesubsection}
+  {5pt}
+  {}
+
+% Настройка интервалов для заголовка подраздела
+\titlespacing*{\subsection}
+  {\otstuplen}
+  {0pt}
+  {0pt}
+
+% Настройка стиля заголовка подподраздела
+\titleformat{\subsubsection}
+  {\normalfont}
+  {\thesubsubsection}
+  {5pt}
+  {}
+
+% Настройка интервалов для заголовка подподраздела
+\titlespacing*{\subsubsection}
+  {\otstuplen}
+  {0pt}
+  {0pt}
+
+
+\AfterEndPreamble{% без этого polyglossia сама всё переопределяет
+    \setsecnumformat{\csname the#1\endcsname\space}
+}
+
+\renewcommand*{\cftappendixname}{\MakeUppercase{\appendixname}\space} % Слово ПРИЛОЖЕНИЕ в оглавлении
+
+%%% Колонтитулы %%%
+% Порядковый номер страницы печатаем на середине нижнего поля страницы
+\makeevenfoot{plain}{}{\rmfamily\thepage}{}
+\makeoddfoot{plain}{}{\rmfamily\thepage}{}
+\makeevenhead{plain}{}{}{}
+\makeoddhead{plain}{}{}{}
+\pagestyle{plain}
+
+
+%%% Оформление заголовков глав, разделов, подразделов %%%
+%% Работа должна быть выполнена ... размером шрифта 12-14 пунктов (ГОСТ Р 7.0.11-2011, 5.3.8). То есть не должно быть надписей шрифтом более 14. Так и поставим.
+%% Эти установки будут давать одинаковый результат независимо от выбора базовым шрифтом 12 пт или 14 пт
+\newcommand{\basegostsectionfont}{\fontsize{14pt}{16pt}\selectfont}
+
+\makechapterstyle{thesisgost}{%
+    \chapterstyle{default}
+    \setlength{\beforechapskip}{0pt}
+    \setlength{\midchapskip}{0pt}
+    \setlength{\afterchapskip}{0pt}
+    \renewcommand*{\chapnamefont}{\basegostsectionfont}
+    \renewcommand*{\chapnumfont}{\basegostsectionfont}
+    \renewcommand*{\chaptitlefont}{\basegostsectionfont}
+    \renewcommand*{\chapterheadstart}{}
+    \renewcommand*{\afterchapternum}{\quad}     % добавляет \quad после номера раздела
+    \renewcommand*{\printchapternum}{\hdngaligni\hdngalign\chapnumfont \thechapter}
+    \renewcommand*{\printchaptername}{}
+    \renewcommand*{\printchapternonum}{\hdngaligni\hdngalign}
+    \renewcommand*{\printchaptertitle}[1]{\chaptitlefont\MakeUppercase{##1}} % Преобразование заголовка в прописные буквы
+}
+
+\chapterstyle{thesisgost}
+
+% Уровень нумерации и добавления в оглавление
+\setsecnumdepth{subsubsection} % Нумеровать до subsubsection
+
+% Настройка стилей шрифтов заголовков
+\setsecheadstyle{\bfseries\MakeUppercase} % Заголовки \section полужирные и прописные
+\setsubsecheadstyle{\bfseries}           % Заголовки \subsection полужирные
+\setsubsubsecheadstyle{\itshape}         % Заголовки \subsubsection курсивом
+
+\setsecheadstyle{\basegostsectionfont\hdngalign}
+\setsecindent{\otstuplen}
+
+\setsubsecheadstyle{\basegostsectionfont\hdngalign}
+\setsubsecindent{\otstuplen}
+
+\setsubsubsecheadstyle{\basegostsectionfont\hdngalign}
+\setsubsubsecindent{\otstuplen}
+
+\sethangfrom{\noindent #1} %все заголовки подразделов центрируются с учетом номера, как block
+
+
+% Определение интервала
+\newcommand{\theintvl}{\baselineskip}
+
+% Убираем лишние отступы в оглавлении
+\setlength{\cftbeforechapterskip}{0pt} % Расстояние до заголовков глав
+\setlength{\cftbeforesectionskip}{0pt} % Расстояние до секций
+
+\addbibresource{Content/bibliography.bib} % Замените на ваш файл .bib
+
+\renewcommand{\multiciterangedelim}{\textendash} % Замена длинного тире на короткое
+
+% Настройка заголовка списка литературы
+\DefineBibliographyStrings{russian}{
+  bibliography = {СПИСОК ИСПОЛЬЗОВАННЫХ ИСТОЧНИКОВ}, % Новый заголовок
+}
+
+% Добавление пустой строки после заголовка
+\renewcommand{\bibsetup}{\setlength{\parskip}{\baselineskip}}
+
+% Форматирование источников
+\setlength{\bibhang}{\parindent} % Установка висячего отступа равным абзацному отступу
+
+% Настройка формата страниц для книг, статей и других типов
+\DeclareFieldFormat[book]{pages}{#1~с.} % Для книг: "672 с."
+\DeclareFieldFormat[article]{pages}{С.~#1} % Для статей: "С. 23–27"
+\DeclareFieldFormat{pages}{#1} % Для всех остальных типов без изменений
+\DeclareFieldFormat{pagination}{} % Удаление "page"
+
+
+% Данные для титульных листов
+\newcommand{\faculty}{Электроники и вычислительной техники}
+\newcommand{\department}{Электронно-вычислительные машины и системы}
+\newcommand{\speciality}{Информатика и вычислительная техника}
+\newcommand{\subject}{}
+\newcommand{\theme}{}
+\newcommand{\studentname}{}
+\newcommand{\studentinitials}{}
+\newcommand{\groupname}{}
+\newcommand{\advisorname}{}
+\newcommand{\normocontrollername}{}
+\newcommand{\dateyear}{}
+\newcommand{\departmentchairname}{А.Е.~Андреев}
+
+\newcommand{\setfaculty}[1]{\renewcommand{\faculty}{#1}}
+\newcommand{\setdepartment}[1]{\renewcommand{\department}{#1}}
+\newcommand{\setspeciality}[1]{\renewcommand{\speciality}{#1}}
+\newcommand{\setsubject}[1]{\renewcommand{\subject}{#1}}
+\newcommand{\settheme}[1]{\renewcommand{\theme}{#1}}
+\newcommand{\setstudentname}[1]{\renewcommand{\studentname}{#1}}
+\newcommand{\setstudentinitials}[1]{\renewcommand{\studentinitials}{#1}}
+\newcommand{\setgroupname}[1]{\renewcommand{\groupname}{#1}}
+\newcommand{\setadvisorname}[1]{\renewcommand{\advisorname}{#1}}
+\newcommand{\setnormocontrollername}[1]{\renewcommand{\normocontrollername}{#1}}
+\newcommand{\setdateyear}[1]{\renewcommand{\dateyear}{#1}}
+\newcommand{\setdepartmentchairname}[1]{\renewcommand{\departmentchairname}{#1}}
+
+\setnormocontrollername{\advisorname}
+\setdateyear{\the\year{}}
+
+\newcommand\maxh[1]{\vphantom{#1}}
+\newlength{\placeholderlength}
+\setlength{\placeholderlength}{4.8cm}
+
+\newcommand\tline[3]{$\underset{\text{#2}}{\text{\underline{\makebox[#1]{\maxh{#3}#3}}}}$}
+\newcommand\tlinee[3]{$\underset{\text{#2}}{\text{\underline{\makebox[\linewidth-\widthof{#1\;}]{\maxh{#3}#3}}}}$}
+\newcommand\putsignedline[3]{\vspace{2mm}#1 \tlinee{#1}{#2}{#3}}
+\newcommand\putplaceholder[4]{\vspace{2mm}#1 \tline{#2}{#3}{#4}}
+
+
+% Вспомогательные длины для разбиения строки на титульных листах
+\newlength{\maxlen}% Максимальная длина подстроки
+\newlength{\substrlen}% Текущая длина подстроки
+\newlength{\tmplen}% Вспомогательная длина подстроки
+\newlength{\curmaxlen}% Текущая максимальная длина подстроки
+\newlength{\introlen}% Длина вводной фразы
+
+% Определение новой команды \splitstring с двумя аргументами
+\newcommand{\splitstring}[4]{
+  % Определение переменных
+  \def\introstr{#1}% Вводная фраза
+  \def\str{#2}% Исходная строка
+  \def\substr{}% Текущая подстрока
+  \def\result{}% Результат
+  \def\substrcount{0}% Счетчик подстрок
+  \def\numofstrings{#4}
+
+  \setlength{\maxlen}{#3}
+  \settowidth{\introlen}{\introstr}
+
+  % Начало цикла
+  \loop
+    % Получение длины исходной строки
+    \settowidth{\substrlen}{\str}
+
+    % Условие выхода из цикла: если строка пуста или достигнуто 5 подстрок
+    \ifdim\substrlen=0pt \else
+      \ifnum \substrcount < \numofstrings
+        % Получаем первое слово из строки (до пробела)
+        \StrBefore{\str}{\space}[\word]
+
+        % Если слово не найдено (в строке одно слово), используем всю строку
+        \ifx\word\empty
+          \let\word=\str
+          \def\str{}
+        \else
+          % Удаляем слово из исходной строки
+          \StrLen{\word}[\wordlen]
+          \StrGobbleLeft{\str}{\the\numexpr\wordlen+1\relax}[\str]
+        \fi
+
+        % Определяем длину подстроки с добавленным словом и пробелом
+        \edef\tmp{\substr\space\word}
+        \settowidth{\tmplen}{\tmp}
+
+        % Если обрабатываем первую подстроку, то её длина включает вводную фразу
+        \ifnum\substrcount=0
+          \setlength{\curmaxlen}{\the\dimexpr\maxlen-\introlen\relax}
+        \else
+          \setlength{\curmaxlen}{\maxlen}
+        \fi
+        
+        % Проверяем, поместится ли слово в текущую подстроку
+        \ifdim\tmplen>\curmaxlen
+          % Если не помещается, завершаем текущую подстроку, причём
+          % если обрабатываем первую подстроку, добавляем вводную фразу
+          \ifnum\substrcount=0
+            \edef\result{\result\noindent\introstr\space\uline{\substr\hfill}\par}
+          \else
+            \edef\result{\result\noindent\uline{\substr\hfill}\par}
+          \fi
+          \edef\substr{\word}% Начинаем новую подстроку с текущего слова
+          \edef\substrcount{\the\numexpr\substrcount+1\relax}
+        \else
+          % Если помещается, добавляем слово в текущую подстроку
+          \edef\substr{\tmp}
+        \fi
+      \else
+        % Если достигнуто 5 подстрок, очищаем строку
+        \edef\str{}
+      \fi
+    \fi
+  % Продолжаем, пока строка не пуста и счетчик меньше 5
+  \ifdim\substrlen>0pt \repeat
+
+  % Добавляем последнюю подстроку, если она не пуста
+  \ifx\substr\empty
+  \else
+    \edef\result{\result\noindent\uline{\substr\hfill}\par}
+    \edef\substrcount{\the\numexpr\substrcount+1\relax}
+  \fi
+
+  % Добавляем оставшиеся пустые подчеркнутые строки, если подстрок меньше 5
+  \loop
+    \ifnum\substrcount < \numofstrings
+      \edef\result{\result\noindent\uline{\hfill}\par}
+      \edef\substrcount{\the\numexpr\substrcount+1\relax}
+    \else
+      \def\substrcount{\numofstrings}
+    \fi
+  \ifnum\substrcount < \numofstrings \repeat
+
+  % Вывод результата
+  \result
+}
+
+
+% Инициализируем переменную для списка глав
+\newcommand{\chapterlist}{}
+
+% Используем условную команду для добавления названий глав в переменную
+\newcommand{\buildchapterlist}{%
+  \ifcsundef{r@ch:first}{}{\appto\chapterlist{\nameref{ch:first}; }}%
+  \ifcsundef{r@ch:second}{}{\appto\chapterlist{\nameref{ch:second}; }}%
+  \ifcsundef{r@ch:third}{}{\appto\chapterlist{\nameref{ch:third}; }}%
+  \ifcsundef{r@ch:fourth}{}{\appto\chapterlist{\nameref{ch:fourth}; }}%
+  
+  % Проверяем, заканчивается ли строка на "; " и убираем его
+  \IfEndWith{\chapterlist}{; }{%
+    \StrGobbleRight{\chapterlist}{2}[\chapterlist]%
+  }{}
+  
+  % Добавляем точку в конец
+  \edef\chapterlist{\chapterlist.}%
+}
+
+
+% Определение команды для создания титульного листа
+\newcommand{\maketitlepage}{
+    \buildchapterlist
+
+    \thispagestyle{empty}
+    \centering
+
+    % Название университета или другой текст
+    {\setSpacing{1.0}{
+        Минобрнауки России \par
+        Федеральное государственное бюджетное образовательное учреждение высшего образования \par
+        <<Волгоградский государственный технический университет>> \par
+    }}
+    
+    \vspace{0.5cm}
+    
+    Факультет \uline{\quad\faculty\hfill} \par
+    Кафедра \uline{\quad\department\hfill} \par
+
+    \vspace{1.0cm}
+
+    {\setSpacing{1.0}{
+        {\large \textbf{ПОЯСНИТЕЛЬНАЯ ЗАПИСКА}} \par
+        {\textbf{к курсовой работе (проекту)}} \par    
+    }}
+        
+    \vspace{0.5cm}
+
+    по дисциплине \uline{\quad\subject\hfill} \par
+
+    \justifying
+    \splitstring{на тему:}{\theme}{\textwidth}{4}
+    
+    \vspace{0.8cm}
+
+    \noindent\putsignedline{Студент}{(фамилия, имя, отчество)}{\studentname}
+    \noindent\putplaceholder{Группа}{\placeholderlength}{}{\groupname}\par
+    \noindent\putplaceholder{Руководитель работы (проекта)\hfill}{\placeholderlength}{(подпись и дата подписания)}{\vphantom{\advisorname}}
+    \hfill
+    \putplaceholder{}{\placeholderlength}{(инициалы и фамилия)}{\advisorname}
+
+    \vspace{1.0cm}
+
+    \noindent Члены комиссии:
+
+    \noindent\putplaceholder{}{\placeholderlength}{(подпись и дата подписания)}{\vphantom{ЙЩ}}
+    \quad
+    \putplaceholder{}{\placeholderlength}{(инициалы и фамилия)}{\vphantom{ЙЩ}}\par
+
+    \noindent\putplaceholder{}{\placeholderlength}{(подпись и дата подписания)}{\vphantom{ЙЩ}}
+    \quad
+    \putplaceholder{}{\placeholderlength}{(инициалы и фамилия)}{\vphantom{ЙЩ}}\par
+
+    \noindent\putplaceholder{}{\placeholderlength}{(подпись и дата подписания)}{\vphantom{ЙЩ}}
+    \quad
+    \putplaceholder{}{\placeholderlength}{(инициалы и фамилия)}{\vphantom{ЙЩ}}\par
+
+    \vspace{1.0cm}
+
+    \noindent\putplaceholder{Нормоконтроллер\hfill}{\placeholderlength}{(подпись и дата подписания)}{\vphantom{\advisorname}}
+    \hfill
+    \putplaceholder{}{\placeholderlength}{(инициалы и фамилия)}{\normocontrollername}
+
+    \vspace{0.5cm}
+
+    \noindent\centering Волгоград \dateyear
+
+    \vfill
+
+    \newpage
+    \thispagestyle{empty}
+
+    % Название университета или другой текст
+    {\setSpacing{1.0}{
+        Минобрнауки России \par
+        Федеральное государственное бюджетное образовательное учреждение высшего образования \par
+        <<Волгоградский государственный технический университет>> \par
+    }}
+    
+    \vspace{0.5cm}
+    
+    Факультет \uline{\quad\faculty\hfill} \par
+    Направление (специальность) \uline{\quad\speciality\hfill} \par
+    Кафедра \uline{\quad\department\hfill} \par
+    Дисциплина \uline{\quad\subject\hfill} \par
+
+    \vspace{0.5cm}
+
+    \begin{adjustwidth}{\linewidth/2}{}
+        \setSpacing{0.8}
+        Утверждаю \par
+        \putplaceholder{Зав. кафедрой \hfill}{\placeholderlength}{}{\departmentchairname} \par
+        <<\uline{\makebox[1cm]{}}>> \; \uline{\hfill} 20 \uline{\makebox[1cm]{}} г.
+    \end{adjustwidth}
+
+    \vspace{0.5cm}
+
+    {\setSpacing{1.0}{
+        {\large \textbf{ЗАДАНИЕ}} \par
+        {\textbf{на курсовую работу (проект)}} \par    
+    }}
+
+    \vspace{0.3cm}
+
+    \justifying
+    \noindent\putsignedline{Студент}{(фамилия, имя, отчество)}{\studentname}
+    \noindent\putplaceholder{Группа}{\placeholderlength}{}{\groupname}\par
+
+    {\setSpacing{1.0}{\splitstring{1.\;\;Тема:}{\theme}{\textwidth}{4}}}
+
+    \noindent Утверждена приказом от <<\uline{\makebox[0.7cm]{}}>> \uline{\makebox[2.7cm]{}} 20 \uline{\makebox[0.7cm]{}} г., \, \textnumero \, \uline{\hspace{3cm}}.
+    
+    \noindent 2.\;\;Срок представления работы (проекта) к защите \hfill <<\uline{\makebox[0.7cm]{}}>> \uline{\makebox[2.7cm]{}} 20 \uline{\makebox[0.7cm]{}} г.
+
+    \vspace{2mm}
+
+    {\setSpacing{1.0}{\splitstring{3.\;\;Содержание расчётно-пояснительной записки:}{\chapterlist}{\textwidth}{4}}}
+
+    \vspace{2mm}
+
+    % {\setSpacing{1.0}{\splitstring{4.\;\;Перечень графического материала:}{}{\textwidth}{3}}}
+    {\setSpacing{1.0}{\noindent 4.\;\;Перечень графического материала: \uline{\hfill}\\\uline{\,\hfill}}}
+
+    \noindent 5.\;\;Дата выдачи задания <<\uline{\makebox[0.7cm]{}}>> \uline{\makebox[2.7cm]{}} 20 \uline{\makebox[0.7cm]{}} г.
+
+    \noindent\putplaceholder{Руководитель работы (проекта)\hfill}{\placeholderlength}{(подпись и дата подписания)}{\vphantom{\advisorname}}
+    \hfill
+    \putplaceholder{}{\placeholderlength}{(инициалы и фамилия)}{\advisorname}
+        
+    \noindent\putplaceholder{Задание принял к исполнению \hfill}{\placeholderlength}{(подпись и дата подписания)}{\vphantom{\advisorname}}
+    \hfill
+    \putplaceholder{}{\placeholderlength}{(инициалы и фамилия)}{\studentinitials}
+
+    \newpage
+}
+
+\counterwithout{equation}{chapter} % Убираем связанность номера формулы с номером главы/раздела
+\counterwithout{figure}{chapter}   % Убираем связанность номера рисунка с номером главы/раздела
+\counterwithout{table}{chapter}    % Убираем связанность номера таблицы с номером главы/раздела
+
+\AfterEndPreamble{
+%% регистрируем счётчики в системе totcounter
+    \regtotcounter{totalcount@figure}
+    \regtotcounter{totalcount@table}       % Если иным способом поставить в преамбуле то ошибка в числе таблиц
+    \regtotcounter{TotPages}               % Если иным способом поставить в преамбуле то ошибка в числе страниц
+    \newtotcounter{totalappendix}
+    \newtotcounter{totalchapter}
+}
+
+\endinput

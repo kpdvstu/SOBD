@@ -1,0 +1,52 @@
+\documentclass[a4paper,14pt,oneside,openany]{memoir}
+\usepackage{coursework}
+    
+\input{Content/title}
+
+\begin{document}
+
+\maketitlepage % Создаем титульный лист
+
+\renewcommand{\contentsname}{Содержание}
+\tableofcontents*
+\addtocontents{toc}{\vspace{1\baselineskip}}
+\clearpage
+
+\justifying
+\chapter*{Введение}
+\addcontentsline{toc}{chapter}{\MakeUppercase{Введение}}
+\vspace{\baselineskip}
+
+\input{Content/introduction}
+
+\input{Content/chapter1}
+
+\input{Content/chapter2}
+
+\input{Content/chapter3}
+
+\input{Content/chapter4}
+
+\chapter*{Заключение}
+\addcontentsline{toc}{chapter}{\MakeUppercase{Заключение}}
+\vspace{\baselineskip}
+
+\input{Content/conclusion}
+
+\clearpage
+
+\printbibliography
+
+%%% Настройки для приложений
+\appendix
+
+% Оформление заголовков приложений ближе к ГОСТ:
+\renewcommand*{\printchaptername}{\MakeUppercase{\appendixname}}
+\renewcommand*{\afterchapternum}{\centering\par\nobreak\vskip \midchapskip}
+\renewcommand*{\printchapternum}{\chapnumfont \thechapter}
+\renewcommand\thechapter{\Asbuk{chapter}}
+\renewcommand*{\printchaptertitle}[1]{\chaptitlefont #1}
+
+\input{Content/appendix}
+
+\end{document}
